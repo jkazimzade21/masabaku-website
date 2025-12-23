@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Masa Baku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2A1A13;
+            background: #FFF3E6;
+            min-height: 100vh;
+        }
+        .nav {
+            padding: 16px 24px;
+            background: #FFEAD9;
+            border-bottom: 1px solid #F0D3BE;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #2A1A13;
+            text-decoration: none;
+        }
+        .nav-links a {
+            margin-left: 24px;
+            color: #7B5A47;
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #C46C3D;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2A1A13;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            color: #7B5A47;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        .form-card {
+            background: #FFEAD9;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid #F0D3BE;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2A1A13;
+            margin-bottom: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            font-family: inherit;
+            border: 1px solid #F0D3BE;
+            border-radius: 10px;
+            background: #FFF3E6;
+            color: #2A1A13;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #C46C3D;
+            box-shadow: 0 0 0 3px rgba(196, 108, 61, 0.15);
+        }
+        input::placeholder, textarea::placeholder {
+            color: #A89080;
+        }
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: #FFF;
+            background: #C46C3D;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .submit-btn:hover {
+            background: #A85A32;
+        }
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        .contact-alt {
+            margin-top: 32px;
+            text-align: center;
+            color: #7B5A47;
+            font-size: 0.95rem;
+        }
+        .contact-alt a {
+            color: #C46C3D;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .contact-alt a:hover {
+            text-decoration: underline;
+        }
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-message h2 {
+            color: #2A1A13;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        .success-message p {
+            color: #7B5A47;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 32px 20px 60px;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+            .form-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="/" class="logo">Masa</a>
+            <div class="nav-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Contact Support</h1>
+        <p class="subtitle">We're here to help. Send us a message and we'll get back to you as soon as possible.</p>
+
+        <div class="form-card">
+            <form id="support-form" action="https://formsubmit.co/jamil@masabaku.com" method="POST">
+                <input type="hidden" name="_subject" value="Masa App Support Request">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://masabaku.com/support?success=true">
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">How can we help?</label>
+                    <textarea id="message" name="message" placeholder="Describe your issue or question..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+
+            <div class="success-message" id="success-message">
+                <h2>Message Sent!</h2>
+                <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+            </div>
+        </div>
+
+        <p class="contact-alt">
+            Or email us directly at <a href="mailto:jamil@masabaku.com">jamil@masabaku.com</a>
+        </p>
+    </div>
+
+    <script>
+        // Show success message if redirected back after form submission
+        if (window.location.search.includes('success=true')) {
+            document.getElementById('support-form').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
