@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masa Baku - Discover Restaurants in Baku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,93 +14,128 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #1a1a1a;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #2A1A13;
+            background: #FFF3E6;
             min-height: 100vh;
         }
         .container {
-            max-width: 600px;
+            max-width: 640px;
             margin: 0 auto;
             padding: 80px 24px;
             text-align: center;
         }
         .logo {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 16px;
+            color: #2A1A13;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
         .tagline {
-            font-size: 1.25rem;
-            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+            color: #7B5A47;
+            margin-bottom: 56px;
+            font-weight: 400;
+        }
+        .hero-card {
+            background: #FFEAD9;
+            border-radius: 24px;
+            padding: 40px 32px;
             margin-bottom: 48px;
-        }
-        .cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: #c46c3d;
-            color: #fff;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(196, 108, 61, 0.3);
-        }
-        .badge {
-            margin-top: 60px;
-        }
-        .badge img {
-            height: 50px;
-        }
-        .links {
-            margin-top: 80px;
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-        }
-        .links a {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .links a:hover {
-            color: rgba(255,255,255,0.8);
+            border: 1px solid #F0D3BE;
+            box-shadow: 0 8px 32px rgba(196, 108, 61, 0.08);
         }
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            margin-top: 60px;
             text-align: center;
         }
         .feature {
-            padding: 24px 16px;
+            padding: 16px 8px;
         }
         .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 12px;
+            width: 56px;
+            height: 56px;
+            background: #FFE1CC;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5rem;
         }
         .feature-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: #fff;
+            color: #2A1A13;
             margin-bottom: 4px;
         }
         .feature-desc {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            color: #7B5A47;
+            line-height: 1.4;
+        }
+        .badge {
+            margin-bottom: 48px;
+        }
+        .badge-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #FFE1CC;
+            color: #4C342A;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid #F0D3BE;
+        }
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #C46C3D;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .links a {
+            color: #7B5A47;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .links a:hover {
+            color: #C46C3D;
         }
         @media (max-width: 500px) {
+            .container {
+                padding: 60px 20px;
+            }
+            .logo {
+                font-size: 2.5rem;
+            }
             .features {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .hero-card {
+                padding: 32px 24px;
+            }
+            .links {
+                gap: 24px;
             }
         }
     </style>
@@ -107,26 +145,31 @@
         <h1 class="logo">Masa</h1>
         <p class="tagline">Discover the best restaurants in Baku</p>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🍽</div>
-                <div class="feature-title">Discover</div>
-                <div class="feature-desc">Find your next favorite spot</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">❤️</div>
-                <div class="feature-title">Save</div>
-                <div class="feature-desc">Build your personal lists</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📞</div>
-                <div class="feature-title">Reserve</div>
-                <div class="feature-desc">Book your table easily</div>
+        <div class="hero-card">
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">&#127869;</div>
+                    <div class="feature-title">Discover</div>
+                    <div class="feature-desc">Find your next favorite spot</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">&#10084;</div>
+                    <div class="feature-title">Save</div>
+                    <div class="feature-desc">Build your personal lists</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">&#128222;</div>
+                    <div class="feature-title">Reserve</div>
+                    <div class="feature-desc">Book your table easily</div>
+                </div>
             </div>
         </div>
 
         <div class="badge">
-            <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Coming soon to the App Store</p>
+            <span class="badge-text">
+                <span class="badge-dot"></span>
+                Coming soon to the App Store
+            </span>
         </div>
 
         <div class="links">
