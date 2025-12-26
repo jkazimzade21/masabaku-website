@@ -39,7 +39,16 @@
         .subtitle {
             font-size: 1rem;
             color: #7B5A47;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+        }
+        .notice {
+            background: #FFEAD9;
+            border: 1px solid #F0D3BE;
+            color: #4C342A;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
         }
         .card {
             background: #FFFFFF;
@@ -54,6 +63,12 @@
             margin-bottom: 16px;
             color: #2A1A13;
             text-align: center;
+        }
+        .hint {
+            font-size: 0.9rem;
+            color: #7B5A47;
+            text-align: center;
+            margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -77,6 +92,10 @@
         input:focus {
             outline: none;
             border-color: #C46C3D;
+        }
+        input:disabled {
+            background: #F9FAFB;
+            color: #9CA3AF;
         }
         .btn {
             display: block;
@@ -116,6 +135,15 @@
             margin-bottom: 20px;
             display: none;
         }
+        .status-message {
+            color: #4C342A;
+            background: #FFF7ED;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: none;
+        }
         .success-message {
             color: #047857;
             background: #ECFDF5;
@@ -147,31 +175,56 @@
         }
         #loading {
             display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             text-align: center;
             color: #7B5A47;
             margin-top: 16px;
+        }
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #F0D3BE;
+            border-top-color: #C46C3D;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 520px) {
+            .container {
+                padding: 48px 20px;
+            }
+            .card {
+                padding: 28px 22px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="/" class="logo">Masa</a>
-        <p class="subtitle">Account Management</p>
+        <p class="subtitle">Delete your account</p>
+        <div class="notice">Sign in to confirm your identity, then permanently delete your account.</div>
 
         <!-- Login Section -->
         <div id="login-section" class="card">
             <h2>Sign In to Delete Account</h2>
-            <div id="login-error" class="error-message"></div>
+            <p class="hint">This helps us verify it’s really you.</p>
+            <div id="login-status" class="status-message" role="status" aria-live="polite"></div>
+            <div id="login-error" class="error-message" role="alert" aria-live="polite"></div>
             <form id="login-form">
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" required placeholder="Enter your email">
+                    <input type="email" id="email" required placeholder="Enter your email" autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" required placeholder="Enter your password">
+                    <input type="password" id="password" required placeholder="Enter your password" autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn btn-primary">Sign In</button>
+                <button type="submit" class="btn btn-primary" id="login-btn">Sign In</button>
             </form>
         </div>
 
@@ -182,7 +235,8 @@
                 You are signed in as <strong id="user-email"></strong>.<br><br>
                 Warning: This action is permanent and cannot be undone. All your data, including profile information and preferences, will be permanently deleted.
             </div>
-            <div id="delete-error" class="error-message"></div>
+            <div id="delete-status" class="status-message" role="status" aria-live="polite"></div>
+            <div id="delete-error" class="error-message" role="alert" aria-live="polite"></div>
             <button id="confirm-delete-btn" class="btn btn-danger">Permanently Delete My Account</button>
             <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
         </div>
@@ -195,7 +249,10 @@
             <a href="/" class="btn btn-primary">Return to Home</a>
         </div>
 
-        <div id="loading">Processing...</div>
+        <div id="loading">
+            <span class="spinner"></span>
+            <span id="loading-text">Processing...</span>
+        </div>
 
         <div class="links">
             <a href="/privacy">Privacy</a>
@@ -223,17 +280,31 @@
         const successSection = document.getElementById('success-section');
         const loginForm = document.getElementById('login-form');
         const loginError = document.getElementById('login-error');
+        const loginStatus = document.getElementById('login-status');
         const deleteError = document.getElementById('delete-error');
+        const deleteStatus = document.getElementById('delete-status');
         const userEmailSpan = document.getElementById('user-email');
         const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
         const cancelBtn = document.getElementById('cancel-btn');
         const loading = document.getElementById('loading');
+        const loadingText = document.getElementById('loading-text');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('login-btn');
+        let deletionComplete = false;
 
         // Functions
-        function showLoading(show) {
-            loading.style.display = show ? 'block' : 'none';
+        function showLoading(show, message) {
+            loading.style.display = show ? 'flex' : 'none';
+            if (message) {
+                loadingText.textContent = message;
+            } else {
+                loadingText.textContent = 'Processing...';
+            }
             const buttons = document.querySelectorAll('button');
             buttons.forEach(btn => btn.disabled = show);
+            emailInput.disabled = show;
+            passwordInput.disabled = show;
         }
 
         function showError(element, message) {
@@ -241,16 +312,64 @@
             element.style.display = 'block';
         }
 
+        function showStatus(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideMessages() {
+            loginError.style.display = 'none';
+            deleteError.style.display = 'none';
+            loginStatus.style.display = 'none';
+            deleteStatus.style.display = 'none';
+        }
+
+        function setSection(section) {
+            loginSection.style.display = section === 'login' ? 'block' : 'none';
+            deleteSection.style.display = section === 'delete' ? 'block' : 'none';
+            successSection.style.display = section === 'success' ? 'block' : 'none';
+        }
+
+        function setUserEmail(email) {
+            userEmailSpan.textContent = email || 'your account';
+        }
+
+        async function refreshSession() {
+            if (!supabase) {
+                showError(loginError, 'Sign-in service failed to load. Please refresh the page or try again later.');
+                return;
+            }
+            const { data, error } = await supabase.auth.getSession();
+            if (error) {
+                showError(loginError, error.message || 'Unable to check your session.');
+                return;
+            }
+            if (data.session?.user) {
+                setUserEmail(data.session.user.email);
+                setSection('delete');
+            } else {
+                setSection('login');
+            }
+        }
+
         // Login Handler
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!supabase) return;
+            hideMessages();
+            if (!supabase) {
+                showError(loginError, 'Sign-in service failed to load. Please refresh the page.');
+                return;
+            }
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
 
-            showLoading(true);
-            loginError.style.display = 'none';
+            if (!email || !password) {
+                showError(loginError, 'Please enter both email and password.');
+                return;
+            }
+
+            showLoading(true, 'Signing in...');
 
             try {
                 const { data, error } = await supabase.auth.signInWithPassword({
@@ -260,11 +379,15 @@
 
                 if (error) throw error;
 
-                if (data.user) {
-                    userEmailSpan.textContent = data.user.email;
-                    loginSection.style.display = 'none';
-                    deleteSection.style.display = 'block';
+                const user = data?.user ?? (await supabase.auth.getUser()).data?.user;
+
+                if (!user) {
+                    showError(loginError, 'Signed in, but we could not load your account. Please try again.');
+                    return;
                 }
+
+                setUserEmail(user.email || email);
+                setSection('delete');
             } catch (error) {
                 showError(loginError, error.message || 'Failed to sign in');
             } finally {
@@ -273,21 +396,25 @@
         });
 
         // Delete Handler
-        confirmDeleteBtn.addEventListener('submit', async () => {
-             // This is a button, not a form, handled by click below
-        });
-        
         confirmDeleteBtn.addEventListener('click', async () => {
-            if (!supabase) return;
+            hideMessages();
+            if (!supabase) {
+                showError(deleteError, 'Sign-in service failed to load. Please refresh the page.');
+                return;
+            }
             
             if (!confirm('Are you absolutely sure you want to delete your account? This cannot be undone.')) {
                 return;
             }
 
-            showLoading(true);
-            deleteError.style.display = 'none';
+            showLoading(true, 'Deleting account...');
 
             try {
+                const { data: userData, error: userError } = await supabase.auth.getUser();
+                if (userError || !userData?.user?.id) {
+                    throw new Error('Your session has expired. Please sign in again.');
+                }
+
                 // Call the RPC function as in the mobile app
                 const { error } = await supabase.rpc('delete_user_account');
                 
@@ -296,8 +423,8 @@
                 // Sign out locally
                 await supabase.auth.signOut();
 
-                deleteSection.style.display = 'none';
-                successSection.style.display = 'block';
+                deletionComplete = true;
+                setSection('success');
             } catch (error) {
                 showError(deleteError, error.message || 'Failed to delete account');
             } finally {
@@ -311,9 +438,30 @@
                 await supabase.auth.signOut();
             }
             loginForm.reset();
-            deleteSection.style.display = 'none';
-            loginSection.style.display = 'block';
+            deletionComplete = false;
+            setSection('login');
         });
+
+        // Initialize
+        (async () => {
+            hideMessages();
+            if (!supabase) {
+                showError(loginError, 'Sign-in service failed to load. Please refresh the page or try again later.');
+                return;
+            }
+
+            await refreshSession();
+
+            supabase.auth.onAuthStateChange((_event, session) => {
+                if (deletionComplete) return;
+                if (session?.user) {
+                    setUserEmail(session.user.email);
+                    setSection('delete');
+                } else {
+                    setSection('login');
+                }
+            });
+        })();
     </script>
 </body>
 </html>
