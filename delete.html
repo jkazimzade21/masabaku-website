@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - Masa Baku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2A1A13;
+            background: #FFF3E6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2A1A13;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            display: block;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: #7B5A47;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(196, 108, 61, 0.08);
+            border: 1px solid #F0D3BE;
+            text-align: left;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #2A1A13;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4C342A;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #C46C3D;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: #C46C3D;
+            color: white;
+        }
+        .btn-danger {
+            background: #DC2626;
+            color: white;
+            margin-top: 16px;
+        }
+        .btn-secondary {
+            background: #F3F4F6;
+            color: #4B5563;
+            margin-top: 12px;
+        }
+        .error-message {
+            color: #DC2626;
+            background: #FEF2F2;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .success-message {
+            color: #047857;
+            background: #ECFDF5;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .warning-text {
+            color: #7B5A47;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .links {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .links a {
+            color: #7B5A47;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .links a:hover {
+            color: #C46C3D;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            color: #7B5A47;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="logo">Masa</a>
+        <p class="subtitle">Account Management</p>
+
+        <!-- Login Section -->
+        <div id="login-section" class="card">
+            <h2>Sign In to Delete Account</h2>
+            <div id="login-error" class="error-message"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
+
+        <!-- Delete Confirmation Section -->
+        <div id="delete-section" class="card" style="display: none;">
+            <h2>Delete Account</h2>
+            <div class="warning-text">
+                You are signed in as <strong id="user-email"></strong>.<br><br>
+                Warning: This action is permanent and cannot be undone. All your data, including profile information and preferences, will be permanently deleted.
+            </div>
+            <div id="delete-error" class="error-message"></div>
+            <button id="confirm-delete-btn" class="btn btn-danger">Permanently Delete My Account</button>
+            <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+
+        <!-- Success Section -->
+        <div id="success-section" class="card" style="display: none;">
+            <div style="font-size: 3rem; margin-bottom: 16px;">👋</div>
+            <h2>Account Deleted</h2>
+            <p class="warning-text">Your account has been successfully deleted. We're sorry to see you go.</p>
+            <a href="/" class="btn btn-primary">Return to Home</a>
+        </div>
+
+        <div id="loading">Processing...</div>
+
+        <div class="links">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <a href="/support">Support</a>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION
+        const SUPABASE_URL = 'https://vyjnhgcmndlfzdcjauoj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5am5oZ2NtbmRsZnpkY2phdW9qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MDIxMzMsImV4cCI6MjA4MDM3ODEzM30._KZUGLomKkcLlxLPTPeOX5AhiW-1otF5cJ5duJjVGLo';
+
+        // Initialize Supabase
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.error('Supabase init error:', e);
+        }
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const deleteSection = document.getElementById('delete-section');
+        const successSection = document.getElementById('success-section');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const deleteError = document.getElementById('delete-error');
+        const userEmailSpan = document.getElementById('user-email');
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const loading = document.getElementById('loading');
+
+        // Functions
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = show);
+        }
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        // Login Handler
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!supabase) return;
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            showLoading(true);
+            loginError.style.display = 'none';
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                if (data.user) {
+                    userEmailSpan.textContent = data.user.email;
+                    loginSection.style.display = 'none';
+                    deleteSection.style.display = 'block';
+                }
+            } catch (error) {
+                showError(loginError, error.message || 'Failed to sign in');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Delete Handler
+        confirmDeleteBtn.addEventListener('submit', async () => {
+             // This is a button, not a form, handled by click below
+        });
+        
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!supabase) return;
+            
+            if (!confirm('Are you absolutely sure you want to delete your account? This cannot be undone.')) {
+                return;
+            }
+
+            showLoading(true);
+            deleteError.style.display = 'none';
+
+            try {
+                // Call the RPC function as in the mobile app
+                const { error } = await supabase.rpc('delete_user_account');
+                
+                if (error) throw error;
+
+                // Sign out locally
+                await supabase.auth.signOut();
+
+                deleteSection.style.display = 'none';
+                successSection.style.display = 'block';
+            } catch (error) {
+                showError(deleteError, error.message || 'Failed to delete account');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Cancel Handler
+        cancelBtn.addEventListener('click', async () => {
+            if (supabase) {
+                await supabase.auth.signOut();
+            }
+            loginForm.reset();
+            deleteSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
