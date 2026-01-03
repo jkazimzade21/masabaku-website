@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Staff Account - Masa Baku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2A1A13;
+            background: #FFF3E6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2A1A13;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            display: block;
+        }
+
+        .logo-suffix {
+            font-weight: 500;
+            color: #7B5A47;
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #7B5A47;
+            margin-bottom: 20px;
+        }
+
+        .notice {
+            background: #FFEAD9;
+            border: 1px solid #F0D3BE;
+            color: #4C342A;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(196, 108, 61, 0.08);
+            border: 1px solid #F0D3BE;
+            text-align: left;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #2A1A13;
+            text-align: center;
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            color: #7B5A47;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4C342A;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E8E0DB;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #FAFAFA;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #C46C3D;
+            box-shadow: 0 0 0 3px rgba(196, 108, 61, 0.15);
+            background: #FFFFFF;
+        }
+
+        input:disabled {
+            background: #F3F4F6;
+            color: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: #C46C3D;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #B35E30;
+        }
+
+        .btn-danger {
+            background: #DC2626;
+            color: white;
+            margin-top: 16px;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #B91C1C;
+        }
+
+        .btn-secondary {
+            background: #F3F4F6;
+            color: #4B5563;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #E5E7EB;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: none;
+            text-align: left;
+        }
+
+        .message.error {
+            color: #991B1B;
+            background: #FEE2E2;
+            border: 1px solid #FECACA;
+        }
+
+        .message.status {
+            color: #4C342A;
+            background: #FFF7ED;
+            border: 1px solid #F0D3BE;
+        }
+
+        .message.visible {
+            display: block;
+        }
+
+        .warning-box {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .warning-box h3 {
+            color: #991B1B;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-box p {
+            color: #7F1D1D;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .warning-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .warning-box .safe-note {
+            background: #ECFDF5;
+            border: 1px solid #A7F3D0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 12px;
+            color: #065F46;
+            font-size: 0.85rem;
+        }
+
+        .user-info {
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .user-info span {
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .links {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .links a {
+            color: #7B5A47;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .links a:hover {
+            color: #C46C3D;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .spinner-dark {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #C46C3D;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 243, 230, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 1000;
+        }
+
+        .loading-overlay.visible {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 40px;
+            height: 40px;
+            border-width: 3px;
+        }
+
+        .loading-overlay p {
+            color: #4C342A;
+            font-weight: 500;
+        }
+
+        .init-error {
+            background: #FEE2E2;
+            border: 1px solid #FECACA;
+            color: #991B1B;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .init-error h3 {
+            margin-bottom: 8px;
+        }
+
+        .init-error p {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .init-error button {
+            background: #991B1B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                padding: 40px 16px;
+            }
+
+            .card {
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+        }
+
+        /* Hide sections by default */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner spinner-dark"></div>
+        <p id="loading-text">Loading...</p>
+    </div>
+
+    <div class="container">
+        <a href="/" class="logo">Masa <span class="logo-suffix">Staff</span></a>
+        <p class="subtitle">Delete your staff account</p>
+        <div class="notice">Sign in with your staff credentials to verify your identity and permanently delete your
+            account.</div>
+
+        <!-- Initialization Error -->
+        <div id="init-error-section" class="section">
+            <div class="init-error">
+                <h3>Connection Error</h3>
+                <p id="init-error-message">Unable to connect to the server. Please check your internet connection and
+                    try again.</p>
+                <button onclick="location.reload()">Try Again</button>
+            </div>
+        </div>
+
+        <!-- Login Section -->
+        <div id="login-section" class="section card">
+            <h2>Sign In</h2>
+            <p class="hint">Enter your staff account credentials to continue</p>
+            <div id="login-message" class="message" role="alert" aria-live="polite"></div>
+            <form id="login-form" novalidate>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="staff@restaurant.com"
+                        autocomplete="email" autocapitalize="none" spellcheck="false">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password"
+                        autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    <span id="login-btn-text">Sign In</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Delete Confirmation Section -->
+        <div id="delete-section" class="section card">
+            <h2>Delete Staff Account</h2>
+            <div class="user-info">
+                Signed in as <span id="user-email"></span>
+            </div>
+            <div class="warning-box">
+                <h3>⚠️ Warning: This action is permanent</h3>
+                <p><strong>What will be deleted:</strong></p>
+                <p>Your staff account, login credentials, and personal profile information will be permanently removed.
+                    This cannot be undone.</p>
+                <div class="safe-note">
+                    <strong>✓ What will NOT be deleted:</strong><br>
+                    Your restaurant's data, reservations, and guest information will remain intact. Only your personal
+                    staff account will be removed.
+                </div>
+            </div>
+            <div id="delete-message" class="message" role="alert" aria-live="polite"></div>
+            <button id="confirm-delete-btn" class="btn btn-danger">
+                <span id="delete-btn-text">Permanently Delete My Account</span>
+            </button>
+            <button id="cancel-btn" class="btn btn-secondary">Cancel and Sign Out</button>
+        </div>
+
+        <!-- Success Section -->
+        <div id="success-section" class="section card">
+            <div class="success-icon">&#128075;</div>
+            <h2>Account Deleted</h2>
+            <p style="color: #7B5A47; margin-bottom: 24px; text-align: center;">Your staff account has been permanently
+                deleted. Thank you for using Masa.</p>
+            <a href="/" class="btn btn-primary">Return to Home</a>
+        </div>
+
+        <div class="links">
+            <a href="/privacy-rest">Privacy</a>
+            <a href="/terms-rest">Terms</a>
+            <a href="/support">Support</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            // Configuration
+            const SUPABASE_URL = 'https://vyjnhgcmndlfzdcjauoj.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5am5oZ2NtbmRsZnpkY2phdW9qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MDIxMzMsImV4cCI6MjA4MDM3ODEzM30._KZUGLomKkcLlxLPTPeOX5AhiW-1otF5cJ5duJjVGLo';
+
+            // State
+            let supabaseClient = null;
+            let currentUser = null;
+            let isProcessing = false;
+
+            // DOM Elements (will be initialized after DOMContentLoaded)
+            let elements = {};
+
+            // Initialize Supabase client
+            function initSupabase() {
+                try {
+                    if (typeof window.supabase === 'undefined' || !window.supabase.createClient) {
+                        throw new Error('Supabase SDK not loaded');
+                    }
+                    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    return true;
+                } catch (error) {
+                    console.error('Failed to initialize Supabase:', error);
+                    return false;
+                }
+            }
+
+            // Show/hide loading overlay
+            function showLoading(show, message = 'Loading...') {
+                if (!elements.loadingOverlay) return;
+
+                if (show) {
+                    elements.loadingText.textContent = message;
+                    elements.loadingOverlay.classList.add('visible');
+                } else {
+                    elements.loadingOverlay.classList.remove('visible');
+                }
+                isProcessing = show;
+            }
+
+            // Show message in a section
+            function showMessage(element, message, type = 'error') {
+                if (!element) return;
+                element.textContent = message;
+                element.className = `message ${type} visible`;
+            }
+
+            // Hide message
+            function hideMessage(element) {
+                if (!element) return;
+                element.classList.remove('visible');
+            }
+
+            // Switch between sections
+            function showSection(sectionId) {
+                const sections = ['init-error-section', 'login-section', 'delete-section', 'success-section'];
+                sections.forEach(id => {
+                    const section = document.getElementById(id);
+                    if (section) {
+                        section.classList.toggle('active', id === sectionId);
+                    }
+                });
+            }
+
+            // Set button loading state
+            function setButtonLoading(button, textElement, loading, loadingText = 'Processing...', normalText = 'Submit') {
+                if (!button || !textElement) return;
+
+                button.disabled = loading;
+                if (loading) {
+                    textElement.innerHTML = `<span class="spinner"></span> ${loadingText}`;
+                } else {
+                    textElement.textContent = normalText;
+                }
+            }
+
+            // Validate email format
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            // Check if user is a staff account
+            function isStaffAccount(user) {
+                if (!user) return false;
+                const appMeta = user.app_metadata || {};
+                return appMeta.account_tier === 'staff';
+            }
+
+            // Handle login form submission
+            async function handleLogin(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (isProcessing || !supabaseClient) return;
+
+                hideMessage(elements.loginMessage);
+
+                const email = elements.emailInput.value.trim();
+                const password = elements.passwordInput.value;
+
+                // Validation
+                if (!email) {
+                    showMessage(elements.loginMessage, 'Please enter your email address.');
+                    elements.emailInput.focus();
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    showMessage(elements.loginMessage, 'Please enter a valid email address.');
+                    elements.emailInput.focus();
+                    return;
+                }
+
+                if (!password) {
+                    showMessage(elements.loginMessage, 'Please enter your password.');
+                    elements.passwordInput.focus();
+                    return;
+                }
+
+                // Disable form
+                setButtonLoading(elements.loginBtn, elements.loginBtnText, true, 'Signing in...', 'Sign In');
+                elements.emailInput.disabled = true;
+                elements.passwordInput.disabled = true;
+
+                try {
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (!data.user) {
+                        throw new Error('Sign in succeeded but no user data returned. Please try again.');
+                    }
+
+                    // Verify this is a staff account
+                    if (!isStaffAccount(data.user)) {
+                        await supabaseClient.auth.signOut();
+                        throw new Error('This is not a staff account. Please use the consumer app at masabaku.com/delete to delete your account.');
+                    }
+
+                    currentUser = data.user;
+                    elements.userEmail.textContent = currentUser.email;
+                    showSection('delete-section');
+
+                } catch (error) {
+                    console.error('Login error:', error);
+
+                    // User-friendly error messages
+                    let errorMessage = 'An error occurred. Please try again.';
+
+                    if (error.message) {
+                        const msg = error.message.toLowerCase();
+                        if (msg.includes('invalid login credentials') || msg.includes('invalid_credentials')) {
+                            errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+                        } else if (msg.includes('email not confirmed')) {
+                            errorMessage = 'Please verify your email address before signing in.';
+                        } else if (msg.includes('too many requests') || msg.includes('rate limit')) {
+                            errorMessage = 'Too many attempts. Please wait a few minutes and try again.';
+                        } else if (msg.includes('network') || msg.includes('fetch')) {
+                            errorMessage = 'Network error. Please check your internet connection.';
+                        } else if (msg.includes('not a staff account')) {
+                            errorMessage = error.message;
+                        } else {
+                            errorMessage = error.message;
+                        }
+                    }
+
+                    showMessage(elements.loginMessage, errorMessage);
+                } finally {
+                    setButtonLoading(elements.loginBtn, elements.loginBtnText, false, 'Signing in...', 'Sign In');
+                    elements.emailInput.disabled = false;
+                    elements.passwordInput.disabled = false;
+                }
+            }
+
+            // Handle account deletion
+            async function handleDelete() {
+                if (isProcessing || !supabaseClient) return;
+
+                hideMessage(elements.deleteMessage);
+
+                // Confirm deletion
+                const confirmed = window.confirm(
+                    'Are you absolutely sure you want to delete your staff account?\n\n' +
+                    'This action is PERMANENT and cannot be undone.\n' +
+                    'Your personal account data will be permanently deleted.\n\n' +
+                    'Note: Your restaurant\'s reservations and data will NOT be affected.'
+                );
+
+                if (!confirmed) return;
+
+                setButtonLoading(elements.confirmDeleteBtn, elements.deleteBtnText, true, 'Deleting...', 'Permanently Delete My Account');
+                elements.cancelBtn.disabled = true;
+
+                try {
+                    // Verify session is still valid
+                    const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+                    if (sessionError || !sessionData.session) {
+                        throw new Error('Your session has expired. Please sign in again.');
+                    }
+
+                    // Call the deletion RPC function
+                    const { error: deleteError } = await supabaseClient.rpc('delete_user_account');
+
+                    if (deleteError) {
+                        throw deleteError;
+                    }
+
+                    // Sign out locally
+                    await supabaseClient.auth.signOut();
+                    currentUser = null;
+
+                    // Show success
+                    showSection('success-section');
+
+                } catch (error) {
+                    console.error('Delete error:', error);
+
+                    let errorMessage = 'Failed to delete account. Please try again.';
+
+                    if (error.message) {
+                        const msg = error.message.toLowerCase();
+                        if (msg.includes('session') || msg.includes('expired') || msg.includes('not authenticated')) {
+                            errorMessage = 'Your session has expired. Please sign in again.';
+                            // Reset to login
+                            setTimeout(() => {
+                                currentUser = null;
+                                showSection('login-section');
+                            }, 2000);
+                        } else if (msg.includes('network') || msg.includes('fetch')) {
+                            errorMessage = 'Network error. Please check your connection and try again.';
+                        } else {
+                            errorMessage = error.message;
+                        }
+                    }
+
+                    showMessage(elements.deleteMessage, errorMessage);
+                } finally {
+                    setButtonLoading(elements.confirmDeleteBtn, elements.deleteBtnText, false, 'Deleting...', 'Permanently Delete My Account');
+                    elements.cancelBtn.disabled = false;
+                }
+            }
+
+            // Handle cancel/sign out
+            async function handleCancel() {
+                if (isProcessing) return;
+
+                try {
+                    if (supabaseClient) {
+                        await supabaseClient.auth.signOut();
+                    }
+                } catch (error) {
+                    console.error('Sign out error:', error);
+                }
+
+                currentUser = null;
+                elements.loginForm.reset();
+                hideMessage(elements.loginMessage);
+                hideMessage(elements.deleteMessage);
+                showSection('login-section');
+            }
+
+            // Check for existing session
+            async function checkExistingSession() {
+                if (!supabaseClient) return;
+
+                try {
+                    const { data, error } = await supabaseClient.auth.getSession();
+
+                    if (error) {
+                        console.error('Session check error:', error);
+                        return;
+                    }
+
+                    if (data.session && data.session.user) {
+                        // Verify this is a staff account
+                        if (!isStaffAccount(data.session.user)) {
+                            await supabaseClient.auth.signOut();
+                            showSection('login-section');
+                            return;
+                        }
+                        currentUser = data.session.user;
+                        elements.userEmail.textContent = currentUser.email;
+                        showSection('delete-section');
+                    } else {
+                        showSection('login-section');
+                    }
+                } catch (error) {
+                    console.error('Session check failed:', error);
+                    showSection('login-section');
+                }
+            }
+
+            // Initialize the page
+            function initialize() {
+                // Get DOM elements
+                elements = {
+                    loadingOverlay: document.getElementById('loading-overlay'),
+                    loadingText: document.getElementById('loading-text'),
+                    initErrorMessage: document.getElementById('init-error-message'),
+                    loginForm: document.getElementById('login-form'),
+                    loginMessage: document.getElementById('login-message'),
+                    emailInput: document.getElementById('email'),
+                    passwordInput: document.getElementById('password'),
+                    loginBtn: document.getElementById('login-btn'),
+                    loginBtnText: document.getElementById('login-btn-text'),
+                    userEmail: document.getElementById('user-email'),
+                    deleteMessage: document.getElementById('delete-message'),
+                    confirmDeleteBtn: document.getElementById('confirm-delete-btn'),
+                    deleteBtnText: document.getElementById('delete-btn-text'),
+                    cancelBtn: document.getElementById('cancel-btn')
+                };
+
+                // Initialize Supabase
+                if (!initSupabase()) {
+                    elements.initErrorMessage.textContent = 'Failed to load authentication service. Please refresh the page or try again later.';
+                    showSection('init-error-section');
+                    return;
+                }
+
+                // Set up event listeners
+                elements.loginForm.addEventListener('submit', handleLogin);
+                elements.confirmDeleteBtn.addEventListener('click', handleDelete);
+                elements.cancelBtn.addEventListener('click', handleCancel);
+
+                // Prevent form from submitting on enter in password field (extra safety)
+                elements.passwordInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleLogin(e);
+                    }
+                });
+
+                // Check for existing session
+                checkExistingSession();
+            }
+
+            // Wait for DOM to be ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initialize);
+            } else {
+                initialize();
+            }
+        })();
+    </script>
+</body>
+
+</html>
